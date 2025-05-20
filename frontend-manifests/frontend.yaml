@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-django
+  labels:
+    app: frontend-django
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend-django
+  template:
+    metadata:
+      labels:
+        app: frontend-django
+    spec:
+      containers:
+        - name: frontend-django
+          image: madeep2669/django-frontend:7
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3001
+          env:
+            - name: REACT_APP_API_URL
+              value: "http://django-service.django.svc.cluster.local:8000"
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "300m"
+              memory: "256Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-django-service
+spec:
+  type: ClusterIP
+  selector:
+    app: frontend-django
+  ports:
+    - port: 80
+      targetPort: 3001
+      protocol: TCP

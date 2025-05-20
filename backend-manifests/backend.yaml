@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: django
-          image: madeep2669/django-backend:11
+          image: madeep2669/django-backend:13
           ports:
             - containerPort: 8000
           resources:

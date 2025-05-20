@@ -121,7 +121,6 @@ kubectl apply -f cluster-issuer.yaml
 ### 3️⃣ Port-Forward NGINX Ingress Locally
 
 ```bash
-kubectl port-forward svc/ingress-nginx-controller 8085:80 -n ingress-nginx
 kubectl port-forward svc/ingress-nginx-controller 8086:80 -n ingress-nginx
 ```
 
@@ -155,8 +154,6 @@ tunnel: ee4fb984-c29b-4ab5-83a8-f9eb3c5b5af2
 credentials-file: /home/nepra/.cloudflared/ee4fb984-c29b-4ab5-83a8-f9eb3c5b5af2.json
 
 ingress:
-  - hostname: app.madeep.shop
-    service: http://127.0.0.1:8085
   - hostname: django.madeep.shop
     service: http://127.0.0.1:8086
   - service: http_status:404

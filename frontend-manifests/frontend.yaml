@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: frontend-django
-          image: madeep2669/django-frontend:9
+          image: madeep2669/django-frontend:10
           imagePullPolicy: Always
           ports:
             - containerPort: 3001

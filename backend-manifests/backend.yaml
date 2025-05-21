@@ -44,7 +44,7 @@ spec:
                   name: django-secrets
                   key: DB_PASSWORD
             - name: DB_HOST
-              value: "mysql-0"
+              value: "mysql-django"
             - name: DB_PORT
               value: "3306"
 ---

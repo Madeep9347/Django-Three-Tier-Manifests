@@ -1,5 +1,4 @@
 
-
 # 🌐 Exposing Minikube-Based Application via Cloudflare Tunnel
 
 This guide walks you through deploying a multi-tier application (frontend, backend, MySQL) on Kubernetes using Minikube, with public HTTPS access via Cloudflare Tunnel and TLS certificates from Let's Encrypt.
@@ -8,14 +7,14 @@ This guide walks you through deploying a multi-tier application (frontend, backe
 
 ## 🧱 Architecture Overview
 
-- **Kubernetes**: Minikube on Ubuntu 22.04
-- **Ingress**: NGINX Ingress installed from GitHub YAML
+- **Kubernetes**: Minikube on Ubuntu 22.04  
+- **Ingress**: NGINX Ingress installed from GitHub YAML  
 - **App Components**:
   - Frontend (port `80`)
   - Backend (port `5000`)
   - MySQL (port `3306`)
-- **Domain**: `madeep.shop` managed via Cloudflare
-- **Tunnel Access**: `django.madeep.shop` via Cloudflare Tunnel
+- **Domain**: `madeep.shop` managed via Cloudflare  
+- **Tunnel Access**: `django.madeep.shop` via Cloudflare Tunnel  
 
 ---
 
@@ -26,6 +25,7 @@ This guide walks you through deploying a multi-tier application (frontend, backe
 - Cloudflare account & API access
 - `cloudflared` installed
 - Ingress NGINX installed via YAML:
+
   ```bash
   kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.10.1/deploy/static/provider/cloud/deploy.yaml
   ```
@@ -37,6 +37,19 @@ This guide walks you through deploying a multi-tier application (frontend, backe
 ### 1️⃣ Deploy Your App
 
 Deploy frontend, backend, MySQL, and Ingress resources.
+
+Once deployed, **migrate the database** in the Django backend:
+
+```bash
+kubectl exec -it <django-backend-pod-name> -- python manage.py makemigrations -n django
+kubectl exec -it <django-backend-pod-name> -- python manage.py migrate -n django
+```
+
+You can find the backend pod name using:
+
+```bash
+kubectl get pods -n django
+```
 
 #### Example Ingress:
 
@@ -76,6 +89,7 @@ spec:
 ```
 
 Apply Ingress:
+
 ```bash
 kubectl apply -f app-ingress.yaml
 ```
@@ -132,7 +146,7 @@ kubectl port-forward svc/ingress-nginx-controller 8086:80 -n ingress-nginx
 
 ```bash
 sudo apt install -y cloudflared
-or
+# OR
 curl -fsSL https://pkg.cloudflare.com/cloudflare-main.gpg | sudo tee /usr/share/keyrings/cloudflare-main.gpg > /dev/null
 echo 'deb [signed-by=/usr/share/keyrings/cloudflare-main.gpg] https://pkg.cloudflare.com/cloudflared jammy main' | sudo tee /etc/apt/sources.list.d/cloudflared.list
 sudo apt-get install -y cloudflared
@@ -196,10 +210,13 @@ Or add manually via Cloudflare Dashboard:
 ## ✅ Final Checks
 
 - DNS resolves:
+
   ```bash
   dig CNAME django.madeep.shop +short
   ```
+
 - Check ingress:
+
   ```bash
   kubectl get ingress -n django
   ```
